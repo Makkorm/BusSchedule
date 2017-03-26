@@ -6,9 +6,18 @@
     axios.get('https://gp-js-test.herokuapp.com/proxy/http://www.minsktrans.by/city/minsk/routes.txt')
         .then(function(response){
             var basicData = basicParse(response.data),
+                sortBasicData = [],
                 data = [],
                 i;
-                console.log(basicData);
+
+            // удаляем маршруты, в которых не даны остановки ( есть два маршрута  ДС Чижовка - кладбище Михановичи, в первом нет данных об остановках, его мы удаляем )
+
+            for ( i=0; i < basicData.length; i++ ){
+                if ( basicData[i][14] === ''){
+                    basicData.splice( i , 1);
+                }
+            }
+
             for ( i=0; i < basicData.length; i++ ){
                 // 921 - номер маршрута последнего автобуса, далее идут метро, трамвай и троллейбусы
                 if (basicData[i][0] === '921'){
@@ -58,7 +67,8 @@
             routes : routes,
             stops : stops,
             markers : [],
-            map : {}
+            map : {},
+            isActive : false
         },
         mounted : function(){
           this.initMap();
@@ -87,9 +97,13 @@
                     markers = [],
                     nameIndex,
                     marker, // init google map marker
-                    numOfMiddleStation,
+                    routeCenterCoord,
                     infoWindow,
-                    map = this.map;
+                    map = this.map,
+                    currentMinLng,
+                    currentMaxLng,
+                    currentMinLat,
+                    currentMaxLat;
 
                 //
                 for ( i=0; i < allStopsLength; i++ ){
@@ -107,7 +121,8 @@
                     }
                 }
 
-                numOfMiddleStation = Math.floor(markers.length/2);
+                currentMinLng = currentMaxLng = +markers[0].Lng;
+                currentMinLat = currentMaxLat = +markers[0].Lat;
 
                 for ( i = 0; i < markers.length; i++ ) {
 
@@ -128,9 +143,22 @@
                         }
                     }(marker));
 
+                    // находим крайние точки маршрута, что бы в дальнейшем отцентрировать карту для выбранного маршрута
+                    currentMinLat = marker.position.lat() < currentMinLat ? marker.position.lat() : currentMinLat;
+                    currentMinLng = marker.position.lng() < currentMinLng ? marker.position.lng() : currentMinLng;
+                    currentMaxLat = marker.position.lat() > currentMaxLat ? marker.position.lat() : currentMaxLat;
+                    currentMaxLng = marker.position.lng() > currentMaxLng ? marker.position.lng() : currentMaxLng;
+
                     this.markers.push(marker);
                 }
-                this.map.setCenter(new google.maps.LatLng(markers[numOfMiddleStation].Lat, markers[numOfMiddleStation].Lng))
+
+                routeCenterCoord = {
+                    Lat : currentMinLat + (currentMaxLat - currentMinLat)/2,
+                    Lng : currentMinLng + (currentMaxLng - currentMinLng)/2
+                };
+
+                console.log(routeCenterCoord);
+                this.map.setCenter(new google.maps.LatLng(routeCenterCoord.Lat, routeCenterCoord.Lng))
 
             }
             ,
@@ -173,6 +201,8 @@
 
         if (stops[index].Name === ""){
             return searchBusName(index - 1);
+        } else if (index < 0){
+            return 'N/A'
         } else {
             return stops[index];
         }
