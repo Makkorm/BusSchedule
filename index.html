@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>Расписание автобусов</title>
+    <link rel="stylesheet" href="style/main.css">
+</head>
+<body>
+    <div class="container" id='app'>
+        <header class="main-header">
+            <h1 class="logo">
+                <a href="#">
+                    <img src="http://www.minsktrans.by/images/main/logo-tr.png" alt="logo">
+                    <img src="http://www.minsktrans.by/images/main/img4.png" alt="">
+                </a>
+            </h1>
+        </header>
+        <main class="main-content">
+            <aside class="aside">
+                <ul class="bus-box">
+                    <li v-for="(route, index) in routes" v-on:click="initRoute(route.Stops)">
+                        <div class="bus-num-box">
+                            <span class="bus-num">{{route.Number}}</span>
+                        </div>
+                        <div class="bus-route">
+                            <span>{{route.Name}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </aside>
+            <div class="map" id="map">
+
+            </div>
+        </main>
+    </div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCHiLtLcwFc9C6zJg2089LwOtrR7I63NA"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.0/vue.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

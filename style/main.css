@@ -1,0 +1,115 @@
+* {
+    box-sizing: border-box;
+}
+
+html,body {
+    height: 100%;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    margin: 0;
+}
+
+.clearfix :after {
+    display: table;
+    height: 0;
+    content: '';
+    clear: both;
+}
+
+.container {
+    height: 100%;
+}
+
+.main-header {
+    padding: 5px 10px;
+    display: table;
+    width: 100%;
+}
+
+.logo img {
+    vertical-align: middle;
+    margin-right: 20px;
+}
+
+.logo a {
+    display: block;
+}
+
+.main-content {
+    position: relative;
+    height: calc(100% - 112px);
+}
+
+/* bus-route */
+
+.aside {
+    /*position: fixed;*/
+    /*top: 112px;*/
+    /*bottom: 0;*/
+
+    width: 400px;
+    float: left;
+    padding: 0 10px;
+    height: 100%;
+    overflow: scroll;
+}
+
+.bus-box {
+    padding-bottom: 130px;
+}
+
+.bus-box li {
+    padding: 6px;
+    color: #dc3131;
+    cursor: pointer;
+}
+
+
+.bus-box li:nth-child(odd) {
+    background: #eee;
+}
+
+.bus-num {
+    display: inline-block;
+    padding: 1px;
+    width: 40px;
+    text-align: center;
+    background: #dc3131;
+    color: #fff;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+
+.bus-num-box {
+    width: 65px;
+    float: left;
+}
+
+.bus-route {
+    margin-left: 65px;
+}
+
+.bus-box li:hover .bus-route {
+    text-decoration: underline;
+}
+
+/* map */
+
+.map {
+    margin-left: 400px;
+
+    height: 100%;
+}
