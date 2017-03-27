@@ -15,11 +15,12 @@
                     <img src="http://www.minsktrans.by/images/main/img4.png" alt="">
                 </a>
             </h1>
+            <h2 class="route-name" v-html="routeName"></h2>
         </header>
         <main class="main-content">
             <aside class="aside">
                 <ul class="bus-box">
-                    <li v-for="(route, index) in routes" v-on:click="initRoute(route.Stops)">
+                    <li v-for="(route, index) in routes" v-on:click="initRoute(route.Stops, index)">
                         <div class="bus-num-box">
                             <span class="bus-num">{{route.Number}}</span>
                         </div>

@@ -38,6 +38,10 @@ h1 {
     width: 100%;
 }
 
+.logo {
+    display: inline-block;
+}
+
 .logo img {
     vertical-align: middle;
     margin-right: 20px;
@@ -45,6 +49,13 @@ h1 {
 
 .logo a {
     display: block;
+}
+
+.route-name {
+    display: inline-block;
+    margin-left: 50px;
+    color: #dc3131;
+    font-size: 18px;
 }
 
 .main-content {
@@ -104,6 +115,10 @@ h1 {
 
 .bus-box li:hover .bus-route {
     text-decoration: underline;
+}
+
+.active {
+    color: #000;
 }
 
 /* map */

@@ -3,62 +3,6 @@
     var routes = [],
         stops = [];
 
-    axios.get('https://gp-js-test.herokuapp.com/proxy/http://www.minsktrans.by/city/minsk/routes.txt')
-        .then(function(response){
-            var basicData = basicParse(response.data),
-                sortBasicData = [],
-                data = [],
-                i;
-
-            // удаляем маршруты, в которых не даны остановки ( есть два маршрута  ДС Чижовка - кладбище Михановичи, в первом нет данных об остановках, его мы удаляем )
-
-            for ( i=0; i < basicData.length; i++ ){
-                if ( basicData[i][14] === ''){
-                    basicData.splice( i , 1);
-                }
-            }
-
-            for ( i=0; i < basicData.length; i++ ){
-                // 921 - номер маршрута последнего автобуса, далее идут метро, трамвай и троллейбусы
-                if (basicData[i][0] === '921'){
-                    data = basicData.splice(0, i + 1);
-                }
-            }
-
-            for ( i=0; i < data.length; i++ ){
-
-                routes.push({
-                    Number : data[i][0],
-                    Name : data[i][10],
-                    Id : data[i][12],
-                    Stops : data[i][14]
-                })
-            }
-
-        })
-        .catch(function(error){
-            console.log(error)
-        });
-
-    axios.get('https://gp-js-test.herokuapp.com/proxy/http://www.minsktrans.by/city/minsk/stops.txt')
-        .then(function(response){
-            var data = basicParse(response.data),
-                i;
-
-            for ( i=0; i < data.length -1; i++ ){
-                stops.push({
-                    Id : data[i][0],
-                    Name : data[i][4],
-                    Lng : data[i][6].slice(0,2) + "." + data[i][6].slice(2),
-                    Lat : data[i][7].slice(0,2) + "." + data[i][7].slice(2)
-                })
-            }
-
-        })
-        .catch(function(error){
-            console.log(error)
-        });
-
 
     var vm = new Vue({
 
@@ -68,10 +12,66 @@
             stops : stops,
             markers : [],
             map : {},
-            isActive : false
+            isActive : false,
+            routeName : ''
         },
         mounted : function(){
-          this.initMap();
+            this.initMap();
+            axios.get('https://gp-js-test.herokuapp.com/proxy/http://www.minsktrans.by/city/minsk/routes.txt')
+                .then(function(response){
+                    var basicData = basicParse(response.data),
+                        sortBasicData = [],
+                        data = [],
+                        i;
+
+                    // удаляем маршруты, в которых не даны остановки ( есть два маршрута  ДС Чижовка - кладбище Михановичи, в первом нет данных об остановках, его мы удаляем )
+
+                    for ( i=0; i < basicData.length; i++ ){
+                        if ( basicData[i][14] === ''){
+                            basicData.splice( i , 1);
+                        }
+                    }
+
+                    for ( i=0; i < basicData.length; i++ ){
+                        // 921 - номер маршрута последнего автобуса, далее идут метро, трамвай и троллейбусы
+                        if (basicData[i][0] === '921'){
+                            data = basicData.splice(0, i + 1);
+                        }
+                    }
+
+                    for ( i=0; i < data.length; i++ ){
+
+                        routes.push({
+                            Number : data[i][0],
+                            Name : data[i][10],
+                            Id : data[i][12],
+                            Stops : data[i][14]
+                        })
+                    }
+
+                })
+                .catch(function(error){
+                    console.log(error)
+                });
+
+            axios.get('https://gp-js-test.herokuapp.com/proxy/http://www.minsktrans.by/city/minsk/stops.txt')
+                .then(function(response){
+                    var data = basicParse(response.data),
+                        i;
+
+                    for ( i=0; i < data.length -1; i++ ){
+                        stops.push({
+                            Id : data[i][0],
+                            Name : data[i][4],
+                            Lng : data[i][6].slice(0,2) + "." + data[i][6].slice(2),
+                            Lat : data[i][7].slice(0,2) + "." + data[i][7].slice(2)
+                        })
+                    }
+
+                })
+                .catch(function(error){
+                    console.log(error)
+                });
         },
         methods : {
             initMap : function(){
@@ -85,7 +85,7 @@
                 this.map = map;
 
             },
-            initRoute : function(stops){
+            initRoute : function(stops, index){
 
                 this.cleanMap();
 
@@ -105,7 +105,9 @@
                     currentMinLat,
                     currentMaxLat;
 
-                //
+
+                this.routeName = "Выбранный маршрут : <span class='bus-num'>"+ this.routes[index].Number + "</span> "+  this.routes[index].Name;
+
                 for ( i=0; i < allStopsLength; i++ ){
                     for ( j=0; j < stopsLength; j++ ){
                         if ( this.stops[i].Id === stops[j]){
@@ -157,7 +159,6 @@
                     Lng : currentMinLng + (currentMaxLng - currentMinLng)/2
                 };
 
-                console.log(routeCenterCoord);
                 this.map.setCenter(new google.maps.LatLng(routeCenterCoord.Lat, routeCenterCoord.Lng))
 
             }
