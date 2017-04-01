@@ -63,13 +63,19 @@ h1 {
     height: calc(100% - 112px);
 }
 
+/* menu */
+
+.menu {
+    font-size: 30px;
+    text-align: right;
+    margin-right: 20px;
+    display: none;
+}
+
+
 /* bus-route */
 
 .aside {
-    /*position: fixed;*/
-    /*top: 112px;*/
-    /*bottom: 0;*/
-
     width: 400px;
     float: left;
     padding: 0 10px;
@@ -127,4 +133,57 @@ h1 {
     margin-left: 400px;
 
     height: 100%;
+}
+
+
+@media only screen and (max-width: 1023px){
+
+    .logo {
+        display: block;
+    }
+
+    .route-name {
+        display: block;
+    }
+
+    .menu {
+        display: block;
+    }
+
+    .route-name {
+        min-height: 23px;
+    }
+
+    .aside {
+        /*display: none;*/
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 99;
+
+        background: #fff;
+    }
+
+    .map {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .slide-enter-active, .slide-leave-active {
+        transition: all .3s cubic-bezier(.65, .05, .36, 1);
+    }
+    .slide-enter, .slide-leave-active {
+        left: -100%;
+    }
+
+}
+
+@media only screen and (max-width : 320px) {
+    .aside {
+        width: 100%;
+    }
+
+    .logo {
+        display: none;
+    }
 }

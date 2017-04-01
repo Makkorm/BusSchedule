@@ -1,7 +1,8 @@
 (function(){
 
     var routes = [],
-        stops = [];
+        stops = [],
+        windowSize = getWindowSize();
 
 
     var vm = new Vue({
@@ -13,7 +14,8 @@
             markers : [],
             map : {},
             isActive : false,
-            routeName : ''
+            routeName : '',
+            showMenu : windowSize
         },
         mounted : function(){
             this.initMap();
@@ -75,6 +77,7 @@
         },
         methods : {
             initMap : function(){
+                console.log(this.showMenu)
 
                 var mapOptions = {
                         zoom : 12,
@@ -154,6 +157,7 @@
                     this.markers.push(marker);
                 }
 
+                // собственно центр карты выбранного маршрута
                 routeCenterCoord = {
                     Lat : currentMinLat + (currentMaxLat - currentMinLat)/2,
                     Lng : currentMinLng + (currentMaxLng - currentMinLng)/2
@@ -207,6 +211,13 @@
         } else {
             return stops[index];
         }
+    }
+
+
+    function getWindowSize(){
+        var windowWidth = window.innerWidth;
+
+        return windowWidth < 1024 ?  false :  true;
     }
 
 

@@ -4,32 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>Расписание автобусов</title>
+    <script src="https://use.fontawesome.com/a85b69e846.js"></script>
     <link rel="stylesheet" href="style/main.css">
 </head>
 <body>
     <div class="container" id='app'>
-        <header class="main-header">
+        <header class="main-header clearfix">
             <h1 class="logo">
                 <a href="#">
                     <img src="http://www.minsktrans.by/images/main/logo-tr.png" alt="logo">
                     <img src="http://www.minsktrans.by/images/main/img4.png" alt="">
                 </a>
             </h1>
+            <div class="menu">
+                <i class="fa fa-bars" aria-hidden="true" v-on:click="showMenu = !showMenu"></i>
+            </div>
             <h2 class="route-name" v-html="routeName"></h2>
         </header>
         <main class="main-content">
-            <aside class="aside">
-                <ul class="bus-box">
-                    <li v-for="(route, index) in routes" v-on:click="initRoute(route.Stops, index)">
-                        <div class="bus-num-box">
-                            <span class="bus-num">{{route.Number}}</span>
-                        </div>
-                        <div class="bus-route">
-                            <span>{{route.Name}}</span>
-                        </div>
-                    </li>
-                </ul>
-            </aside>
+            <transition name="slide">
+                <aside class="aside" v-if="showMenu === true">
+                    <ul class="bus-box">
+                        <li v-for="(route, index) in routes" v-on:click="initRoute(route.Stops, index)">
+                            <div class="bus-num-box">
+                                <span class="bus-num">{{route.Number}}</span>
+                            </div>
+                            <div class="bus-route">
+                                <span>{{route.Name}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </aside>
+            </transition>
             <div class="map" id="map">
 
             </div>
