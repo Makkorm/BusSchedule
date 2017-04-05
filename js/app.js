@@ -2,6 +2,7 @@
 
     var routes = [],
         stops = [],
+        isTablet = false,
         windowSize = getWindowSize();
 
 
@@ -15,6 +16,7 @@
             map : {},
             isActive : false,
             routeName : '',
+            isTablet : isTablet,
             showMenu : windowSize
         },
         mounted : function(){
@@ -77,7 +79,6 @@
         },
         methods : {
             initMap : function(){
-                console.log(this.showMenu)
 
                 var mapOptions = {
                         zoom : 12,
@@ -91,6 +92,7 @@
             initRoute : function(stops, index){
 
                 this.cleanMap();
+                this.isTablet ? this.showMenu = false : this.showMenu;
 
                 var stops = stops.split(','),
                     stopsLength = stops.length,
@@ -216,6 +218,7 @@
 
     function getWindowSize(){
         var windowWidth = window.innerWidth;
+        windowWidth < 1024 ? isTablet = true : isTablet = false;
 
         return windowWidth < 1024 ?  false :  true;
     }

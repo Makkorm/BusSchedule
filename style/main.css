@@ -178,12 +178,22 @@ h1 {
 
 }
 
-@media only screen and (max-width : 320px) {
+@media only screen and (max-width : 768px) {
     .aside {
         width: 100%;
     }
 
     .logo {
         display: none;
+    }
+
+    .route-name {
+        font-size: 14px;
+        text-align: left;
+        margin-left: 0;
+    }
+
+    .menu {
+        margin-top: 15px;
     }
 }
